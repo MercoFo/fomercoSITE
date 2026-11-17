@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title><%= titulo ? `${titulo} · FoMerco` : 'FoMerco · Integração regional e Mercosul' %></title>
+<meta name="description" content="<%= typeof descricaoPagina !== 'undefined' && descricaoPagina ? descricaoPagina : 'FoMerco: rede de pesquisa sobre integração regional com foco no Mercosul. Encontros bienais, Anais do FoMerco e Carta FoMerco.' %>">
+<link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="/static/fonts/fraunces-latin-full-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/css/site.css">
+<% if (typeof metas !== 'undefined') { for (const [nome, valor] of metas) { if (valor) { %><meta name="<%= nome %>" content="<%= valor %>">
+<% } } } %>
+</head>
+<body class="<%= secao ? 'pub-' + secao : '' %>">
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<header class="topo">
+  <div class="envoltorio">
+    <a class="marca" href="/" aria-label="FoMerco, página inicial"><img src="/static/img/logo-reduzido.png" alt="FoMerco" width="600" height="333"></a>
+    <nav class="menu" aria-label="Principal">
+      <a href="/" <%- caminho === '/' ? 'aria-current="page"' : '' %>>Início</a>
+      <a href="/sobre" <%- secao === 'sobre' ? 'aria-current="page"' : '' %>>Sobre</a>
+      <a class="menu-anais" href="/anais" <%- secao === 'anais' ? 'aria-current="page"' : '' %>>Anais</a>
+      <a href="/carta" <%- secao === 'carta' ? 'aria-current="page"' : '' %>>Carta FoMerco</a>
+      <% if (cfg.evento_ativo === '1' && cfg.evento_link) { %><a class="menu-evento" href="<%= cfg.evento_link %>" rel="noopener" target="_blank"><%= cfg.evento_nome || 'Evento' %></a><% } %>
+    </nav>
+  </div>
+</header>
+<main id="conteudo">

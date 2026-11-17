@@ -1,0 +1,31 @@
+{
+  "name": "fomerco-site",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "demo": "node scripts/demo.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "private": "true",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@fontsource-variable/figtree": "^5.3.0",
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@libsql/client": "^0.18.0",
+    "@node-rs/argon2": "^2.2.2",
+    "ejs": "^7.0.2",
+    "express": "^5.3.0",
+    "helmet": "^8.3.0",
+    "marked": "^18.2.1",
+    "multer": "^2.5.0",
+    "sanitize-html": "^2.18.2"
+  }
+}

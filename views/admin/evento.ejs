@@ -1,0 +1,27 @@
+<%- include('_topo', { tituloAdmin: 'Evento atual' }) %>
+<h1>Evento atual</h1>
+<p class="intro">Este bloco aparece com destaque na página inicial. Atualize a cada encontro.</p>
+<% if (erro) { %><p class="aviso erro" role="alert"><%= erro %></p><% } %>
+<form method="post" enctype="multipart/form-data" class="formulario">
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <label class="caixa"><input type="checkbox" name="evento_ativo" value="1" <%= cfg.evento_ativo === '1' ? 'checked' : '' %>> Mostrar o bloco do evento na página inicial</label>
+  <div class="duas">
+    <label>Nome do evento<input name="evento_nome" value="<%= cfg.evento_nome %>" maxlength="120" placeholder="XXI FoMerco"></label>
+    <label>Datas<input name="evento_datas" value="<%= cfg.evento_datas %>" maxlength="120" placeholder="10 a 12 de setembro de 2027"></label>
+  </div>
+  <label>Tema<input name="evento_tema" value="<%= cfg.evento_tema %>" maxlength="300"></label>
+  <label>Local<input name="evento_local" value="<%= cfg.evento_local %>" maxlength="200" placeholder="Cidade, instituição"></label>
+  <label>Texto curto<textarea name="evento_texto" rows="3" maxlength="1200"><%= cfg.evento_texto %></textarea></label>
+  <div class="duas">
+    <label>Link do site do evento (Even3)<input name="evento_link" type="url" value="<%= cfg.evento_link %>" maxlength="500" placeholder="https://www.even3.com.br/..."></label>
+    <label>Texto do botão<input name="evento_botao" value="<%= cfg.evento_botao %>" maxlength="60"></label>
+  </div>
+  <fieldset>
+    <legend>Arte do evento</legend>
+    <img class="miniatura" src="<%= imagem %>" alt="Arte atual do evento" width="160" height="160">
+    <label>Trocar arte <small>PNG, JPG ou WebP, quadrada, até 5 MB</small><input type="file" name="imagem" accept="image/png,image/jpeg,image/webp"></label>
+    <% if (cfg.evento_imagem_id) { %><label class="caixa"><input type="checkbox" name="remover_imagem" value="1"> Voltar para a arte padrão</label><% } %>
+  </fieldset>
+  <div class="barra"><button class="botao">Salvar alterações</button></div>
+</form>
+<%- include('_fim') %>

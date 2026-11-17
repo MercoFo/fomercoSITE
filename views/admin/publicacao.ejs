@@ -1,0 +1,58 @@
+<%- include('_topo', { tituloAdmin: pub.titulo }) %>
+<h1><%= pub.titulo %></h1>
+
+<section class="painel-secao">
+  <div class="cabeca-secao">
+    <h2>Números</h2>
+    <a class="botao" href="/admin/pub/<%= pub.slug %>/novo">Novo número</a>
+  </div>
+  <% if (!numeros.length) { %>
+    <p class="vazio">Nenhum número ainda. Clique em “Novo número” para criar o primeiro.</p>
+  <% } else { %>
+  <table class="tabela">
+    <thead><tr><th>Numeração</th><th>Título</th><th><%= pub.tem_trabalhos ? 'Trabalhos' : 'PDF' %></th><th>Situação</th><th></th></tr></thead>
+    <tbody>
+    <% for (const n of numeros) { %>
+      <tr>
+        <td><strong><%= n.designacao %></strong></td>
+        <td><%= n.titulo %></td>
+        <td><%= pub.tem_trabalhos ? n.total_trabalhos : (n.pdf_id ? 'Enviado' : 'Falta enviar') %></td>
+        <td><span class="etiqueta <%= n.publicado ? 'pub' : 'rasc' %>"><%= n.publicado ? 'Publicado' : 'Rascunho' %></span></td>
+        <td><a href="/admin/numero/<%= n.id %>">Editar</a></td>
+      </tr>
+    <% } %>
+    </tbody>
+  </table>
+  <% } %>
+</section>
+
+<section class="painel-secao">
+  <h2>Pronto para pedir o ISSN?</h2>
+  <ul class="checklist">
+    <% for (const c of checklist) { %><li class="<%= c.ok ? 'ok' : 'falta' %>"><span aria-hidden="true"><%= c.ok ? '✓' : '○' %></span> <%= c.texto %><span class="sr"><%= c.ok ? ' (cumprido)' : ' (pendente)' %></span></li><% } %>
+  </ul>
+  <p class="nota">Lembre-se de manter sempre o mesmo título e de usar a numeração Vol., No. e ano.</p>
+</section>
+
+<section class="painel-secao">
+  <h2>Dados da publicação</h2>
+  <p class="intro">Estes dados aparecem no Expediente e no cabeçalho da publicação.</p>
+  <form method="post" class="formulario">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <label>Título <small>não mude depois de pedir o ISSN</small><input name="titulo" value="<%= pub.titulo %>" maxlength="160" required></label>
+    <label>Descrição curta <small>aparece na página inicial</small><textarea name="descricao" rows="2" maxlength="500"><%= pub.descricao %></textarea></label>
+    <div class="duas">
+      <label>Periodicidade<input name="periodicidade" value="<%= pub.periodicidade %>" maxlength="60" placeholder="Mensal, Bienal..."></label>
+      <label>ISSN <small>quando for atribuído</small><input name="issn" value="<%= pub.issn %>" maxlength="20" placeholder="0000-0000"></label>
+    </div>
+    <label>Instituição responsável (editora)<input name="instituicao" value="<%= pub.instituicao %>" maxlength="300"></label>
+    <label>Endereço completo<textarea name="endereco" rows="3" maxlength="500" placeholder="Rua, número, bairro, cidade, estado, CEP, país"><%= pub.endereco %></textarea></label>
+    <div class="duas">
+      <label>E-mail de contato<input name="email" type="email" value="<%= pub.email %>" maxlength="200"></label>
+      <label>Licença<input name="licenca" value="<%= pub.licenca %>" maxlength="120" placeholder="CC BY 4.0"></label>
+    </div>
+    <div class="barra"><button class="botao">Salvar dados</button></div>
+  </form>
+  <p class="nota">O corpo editorial, a apresentação e as normas ficam em <a href="/admin/paginas">Páginas de texto</a>.</p>
+</section>
+<%- include('_fim') %>

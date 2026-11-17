@@ -1,0 +1,25 @@
+<%- include('partials/cabeca') %>
+<%- include('partials/pub-topo') %>
+<div class="envoltorio conteudo">
+  <% if (!atual) { %>
+  <p class="vazio">Ainda não há números publicados.</p>
+  <% } else { %>
+  <div class="destaque-atual">
+    <p class="rotulo">Número atual</p>
+    <h2><a href="/<%= pub.slug %>/<%= atual.slug %>"><%= atual.designacao %></a></h2>
+    <% if (atual.titulo) { %><p><%= atual.titulo %></p><% } %>
+    <% if (atual.data_publicacao) { %><p>Publicado em <%= formatarData(atual.data_publicacao) %></p><% } %>
+  </div>
+  <h2 id="anteriores">Números anteriores</h2>
+  <% if (!anteriores.length) { %>
+  <p class="vazio">Este é o primeiro número publicado.</p>
+  <% } else { %>
+  <ul class="numeros">
+    <% for (const n of anteriores) { %>
+    <li><a href="/<%= pub.slug %>/<%= n.slug %>"><span class="desig"><%= n.designacao %></span><span class="tit"><%= n.titulo %></span><span class="data"><%= formatarData(n.data_publicacao) %></span></a></li>
+    <% } %>
+  </ul>
+  <% } %>
+  <% } %>
+</div>
+<%- include('partials/pe') %>

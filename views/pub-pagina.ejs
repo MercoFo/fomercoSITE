@@ -1,0 +1,21 @@
+<%- include('partials/cabeca') %>
+<%- include('partials/pub-topo') %>
+<div class="envoltorio conteudo">
+  <h2><%= pag.titulo %></h2>
+  <% if (aba === 'expediente') { %>
+  <dl class="ficha">
+    <dt>Publicação</dt><dd><%= pub.titulo %></dd>
+    <dt>Periodicidade</dt><dd><%= pub.periodicidade || 'a definir' %></dd>
+    <dt>Instituição responsável</dt><dd><%= pub.instituicao || 'a definir' %></dd>
+    <dt>Endereço</dt><dd><%= pub.endereco || 'a definir' %></dd>
+    <% if (pub.email) { %><dt>Contato</dt><dd><a href="mailto:<%= pub.email %>"><%= pub.email %></a></dd><% } %>
+    <% if (pub.issn) { %><dt>ISSN</dt><dd><%= pub.issn %></dd><% } %>
+    <dt>Acesso</dt><dd>Aberto e gratuito<%= pub.licenca ? `, licença ${pub.licenca}` : '' %></dd>
+  </dl>
+  <% } %>
+  <div class="prosa"><%- md(pag.corpo) %></div>
+  <% if (aba === 'apresentacao' && pub.licenca) { %>
+  <p class="licenca">Todo o conteúdo de <%= pub.titulo %> é publicado em acesso aberto, sem custo para leitores e autores, sob a licença <%= pub.licenca %>.</p>
+  <% } %>
+</div>
+<%- include('partials/pe') %>

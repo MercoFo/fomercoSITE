@@ -1,0 +1,12 @@
+<%- include('_topo', { tituloAdmin: pag.titulo }) %>
+<p class="trilha"><a href="/admin/paginas">Páginas de texto</a></p>
+<h1><%= pag.titulo %> <small><%= pag.chave.startsWith('anais') ? 'Anais do FoMerco' : pag.chave.startsWith('carta') ? 'Carta FoMerco' : 'Site' %></small></h1>
+<form method="post" class="formulario largo">
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <label>Texto<textarea name="corpo" rows="22"><%= pag.corpo %></textarea></label>
+  <%- include('_ajuda-texto') %>
+  <div class="barra"><button class="botao">Salvar alterações</button></div>
+</form>
+<h2>Prévia do que está publicado</h2>
+<div class="previa prosa"><%- md(pag.corpo) %></div>
+<%- include('_fim') %>

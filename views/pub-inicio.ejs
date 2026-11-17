@@ -1,0 +1,23 @@
+<%- include('partials/cabeca') %>
+<%- include('partials/pub-topo') %>
+<div class="envoltorio conteudo">
+  <% if (pub.atual) { %>
+  <div class="destaque-atual">
+    <p class="rotulo">Número atual</p>
+    <h2><a href="/<%= pub.slug %>/<%= pub.atual.slug %>"><%= pub.atual.designacao %></a></h2>
+    <% if (pub.atual.titulo) { %><p><%= pub.atual.titulo %></p><% } %>
+    <a class="botao" href="/<%= pub.slug %>/<%= pub.atual.slug %>">Ver este número</a>
+  </div>
+  <% } %>
+  <div class="prosa"><%- md(apresentacao.corpo) %></div>
+  <% if (anteriores.length) { %>
+  <h2 class="mt">Números anteriores</h2>
+  <ul class="numeros">
+    <% for (const n of anteriores) { %>
+    <li><a href="/<%= pub.slug %>/<%= n.slug %>"><span class="desig"><%= n.designacao %></span><span class="tit"><%= n.titulo %></span><span class="data"><%= formatarData(n.data_publicacao) %></span></a></li>
+    <% } %>
+  </ul>
+  <p class="mt-p"><a href="/<%= pub.slug %>/numeros#anteriores">Ver todos os números</a></p>
+  <% } %>
+</div>
+<%- include('partials/pe') %>

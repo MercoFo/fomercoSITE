@@ -1,0 +1,48 @@
+<%- include('partials/cabeca') %>
+<%- include('partials/pub-topo') %>
+<div class="envoltorio conteudo">
+  <div class="numero-cabeca">
+    <div>
+      <p class="trilha"><%= ehAtual ? 'Número atual' : 'Número anterior' %></p>
+      <h2><%= n.designacao %></h2>
+      <% if (n.titulo) { %><p class="subtitulo"><%= n.titulo %></p><% } %>
+      <% if (n.data_publicacao) { %><p>Publicado em <%= formatarData(n.data_publicacao) %></p><% } %>
+      <div class="acoes">
+        <% if (n.pdf_url) { %><a class="botao" href="<%= n.pdf_url %>">Abrir número completo <small>PDF, <%= tamanhoLegivel(n.pdf_tamanho) %></small></a><% } %>
+      </div>
+    </div>
+    <% if (n.capa_url) { %><img class="capa" src="<%= n.capa_url %>" alt="Capa de <%= pub.titulo %>, <%= n.designacao %>"><% } %>
+  </div>
+  <% if (n.descricao) { %><div class="prosa"><%- md(n.descricao) %></div><% } %>
+
+  <% if (secoes.length) { %>
+  <section class="sumario" aria-labelledby="sumario-titulo">
+    <h2 id="sumario-titulo">Sumário</h2>
+    <% for (const sec of secoes) { %>
+      <% if (sec.nome) { %><h3><%= sec.nome %></h3><% } %>
+      <ol>
+        <% for (const t of sec.itens) { %>
+        <li>
+          <span class="t-titulo"><a href="/<%= pub.slug %>/trabalho/<%= t.id %>"><%= t.titulo %></a></span>
+          <span class="t-autores"><%= t.autores_lista.join('; ') %></span>
+          <span class="t-acoes">
+            <% if (t.pdf_url) { %><a href="<%= t.pdf_url %>">PDF</a><% } %>
+            <% if (t.paginas) { %><span>p. <%= t.paginas %></span><% } %>
+          </span>
+        </li>
+        <% } %>
+      </ol>
+    <% } %>
+  </section>
+  <% } %>
+
+  <% if (anexos.length) { %>
+  <section aria-labelledby="anexos-titulo">
+    <h2 id="anexos-titulo" class="mt">Arquivos complementares</h2>
+    <ul class="anexos">
+      <% for (const x of anexos) { %><li><a href="<%= x.url %>"><%= x.rotulo %></a> <small>(PDF, <%= tamanhoLegivel(x.tamanho) %>)</small></li><% } %>
+    </ul>
+  </section>
+  <% } %>
+</div>
+<%- include('partials/pe') %>

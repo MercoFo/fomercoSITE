@@ -1,0 +1,13 @@
+<%- include('_topo', { tituloAdmin: 'Páginas de texto' }) %>
+<h1>Páginas de texto</h1>
+<p class="intro">Textos fixos do site. Os dados do Expediente (periodicidade, instituição, endereço, ISSN) ficam na página de cada publicação.</p>
+<% const grupos = { sobre: 'Site', anais: 'Anais do FoMerco', carta: 'Carta FoMerco' }; %>
+<table class="tabela">
+  <thead><tr><th>Página</th><th>Onde aparece</th><th>Última alteração</th><th></th></tr></thead>
+  <tbody>
+  <% for (const p of paginas) { const g = grupos[p.chave.split('-')[0]] || 'Site'; %>
+    <tr><td><%= p.titulo %></td><td><%= g %></td><td><%= formatarData(p.atualizado_em) %></td><td><a href="/admin/paginas/<%= p.chave %>">Editar</a></td></tr>
+  <% } %>
+  </tbody>
+</table>
+<%- include('_fim') %>

@@ -1,0 +1,20 @@
+<%- include('_topo', { tituloAdmin: 'Início' }) %>
+<h1>Olá, <%= usuario.usuario %></h1>
+<p class="intro">Escolha o que quer atualizar. As mudanças aparecem no site assim que você salva.</p>
+<div class="atalhos">
+  <a class="atalho evento" href="/admin/evento">
+    <strong>Evento atual</strong>
+    <span><%= cfg.evento_ativo === '1' ? `Mostrando “${cfg.evento_nome}” na página inicial` : 'Bloco do evento escondido' %></span>
+  </a>
+  <% for (const p of pubs) { %>
+  <a class="atalho <%= p.slug %>" href="/admin/pub/<%= p.slug %>">
+    <strong><%= p.titulo %></strong>
+    <span><%= p.publicados %> <%= p.publicados === 1 ? 'número publicado' : 'números publicados' %><%= p.numeros.length > p.publicados ? `, ${p.numeros.length - p.publicados} em rascunho` : '' %></span>
+  </a>
+  <% } %>
+  <a class="atalho" href="/admin/paginas">
+    <strong>Páginas de texto</strong>
+    <span>Sobre, Apresentação, Expediente e Normas</span>
+  </a>
+</div>
+<%- include('_fim') %>

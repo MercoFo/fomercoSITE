@@ -1,0 +1,13 @@
+<%- include('_topo', { tituloAdmin: 'Minha conta' }) %>
+<h1>Minha conta</h1>
+<p class="intro">Usuário: <strong><%= usuario.usuario %></strong> · <%= usuario.papel === 'admin' ? 'Administrador' : 'Editor' %></p>
+<% if (erro) { %><p class="aviso erro" role="alert"><%= erro %></p><% } %>
+<form method="post" class="formulario estreito">
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <label>Senha atual<input type="password" name="atual" autocomplete="current-password" required maxlength="200"></label>
+  <label>Nova senha <small>pelo menos 10 caracteres; uma frase longa é ótima</small><input type="password" name="nova" autocomplete="new-password" required minlength="10" maxlength="200"></label>
+  <label>Repita a nova senha<input type="password" name="confirmar" autocomplete="new-password" required minlength="10" maxlength="200"></label>
+  <div class="barra"><button class="botao">Trocar senha</button></div>
+</form>
+<p class="nota">Ao trocar a senha, você é desconectado dos outros aparelhos.</p>
+<%- include('_fim') %>

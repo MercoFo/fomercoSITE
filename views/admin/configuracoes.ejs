@@ -1,0 +1,17 @@
+<%- include('_topo', { tituloAdmin: 'Página inicial e contato' }) %>
+<h1>Página inicial e contato</h1>
+<form method="post" class="formulario">
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <fieldset>
+    <legend>Abertura da página inicial</legend>
+    <label>Título<input name="hero_titulo" value="<%= cfg.hero_titulo %>" maxlength="160"></label>
+    <label>Texto<textarea name="hero_texto" rows="4" maxlength="1200"><%= cfg.hero_texto %></textarea></label>
+  </fieldset>
+  <fieldset>
+    <legend>Contato no rodapé</legend>
+    <label>E-mail<input name="contato_email" type="email" value="<%= cfg.contato_email %>" maxlength="200"></label>
+    <label>Endereço<textarea name="contato_endereco" rows="3" maxlength="500"><%= cfg.contato_endereco %></textarea></label>
+  </fieldset>
+  <div class="barra"><button class="botao">Salvar alterações</button></div>
+</form>
+<%- include('_fim') %>

@@ -1,0 +1,31 @@
+<% const novo = !t.id; %>
+<%- include('_topo', { tituloAdmin: novo ? 'Novo trabalho' : t.titulo }) %>
+<p class="trilha"><a href="/admin/pub/<%= pub.slug %>"><%= pub.titulo %></a> / <a href="/admin/numero/<%= n.id %>#trabalhos"><%= n.designacao %></a></p>
+<h1><%= novo ? 'Novo trabalho' : 'Editar trabalho' %></h1>
+<% if (erros.length) { %><div class="aviso erro" role="alert"><% for (const e of erros) { %><p><%= e %></p><% } %></div><% } %>
+<form method="post" action="<%= novo ? `/admin/numero/${n.id}/trabalho/novo` : `/admin/trabalho/${t.id}` %>" enctype="multipart/form-data" class="formulario">
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <label>Título<input name="titulo" value="<%= t.titulo || '' %>" maxlength="500" required></label>
+  <label>Autores <small>um por linha, como devem aparecer na citação</small><textarea name="autores" rows="3" required><%= t.autores || '' %></textarea></label>
+  <label>Resumo<textarea name="resumo" rows="7"><%= t.resumo || '' %></textarea></label>
+  <label>Palavras-chave <small>separadas por ponto e vírgula</small><input name="palavras_chave" value="<%= t.palavras_chave || '' %>" maxlength="500"></label>
+  <div class="tres">
+    <label>Seção ou GT <small>agrupa no sumário</small><input name="secao" value="<%= t.secao || '' %>" maxlength="200"></label>
+    <label>Páginas <small>ex.: 12-25</small><input name="paginas" value="<%= t.paginas || '' %>" maxlength="20"></label>
+    <label>Ordem <small>0 = automática</small><input name="ordem" inputmode="numeric" value="<%= t.ordem || 0 %>" maxlength="4"></label>
+  </div>
+  <label>PDF do trabalho <small>até 40 MB</small><input type="file" name="pdf" accept="application/pdf"></label>
+  <% if (t.pdf_url) { %><p class="arquivo-atual">Atual: <a href="<%= t.pdf_url %>" target="_blank" rel="noopener"><%= t.pdf_nome %></a> <label class="caixa"><input type="checkbox" name="remover_pdf" value="1"> Remover</label></p><% } %>
+  <div class="barra">
+    <button class="botao"><%= novo ? 'Adicionar trabalho' : 'Salvar alterações' %></button>
+    <% if (novo) { %><button class="botao contorno" name="continuar" value="1">Adicionar e cadastrar outro</button><% } %>
+  </div>
+</form>
+<% if (!novo) { %>
+<section class="painel-secao zona-perigo">
+  <details class="excluir"><summary>Excluir trabalho</summary>
+    <form method="post" action="/admin/trabalho/<%= t.id %>/excluir"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="botao vermelho">Sim, excluir este trabalho</button></form>
+  </details>
+</section>
+<% } %>
+<%- include('_fim') %>

@@ -1,0 +1,17 @@
+<section class="pub-topo <%= pub.slug %>">
+  <div class="envoltorio">
+    <h1><a href="/<%= pub.slug %>"><%= pub.titulo %></a></h1>
+    <p class="meta">
+      <span>Periodicidade: <%= pub.periodicidade || 'a definir' %></span>
+      <% if (pub.issn) { %><span>ISSN <%= pub.issn %></span><% } %>
+      <span>Acesso aberto</span>
+    </p>
+    <nav class="abas" aria-label="Seções de <%= pub.titulo %>">
+      <a href="/<%= pub.slug %>/apresentacao" <%- aba === 'apresentacao' ? 'aria-current="page"' : '' %>>Apresentação</a>
+      <a href="/<%= pub.slug %>/expediente" <%- aba === 'expediente' ? 'aria-current="page"' : '' %>>Expediente</a>
+      <a href="/<%= pub.slug %>/atual" <%- aba === 'atual' ? 'aria-current="page"' : '' %>>Número atual</a>
+      <a href="/<%= pub.slug %>/numeros#anteriores" <%- aba === 'numeros' ? 'aria-current="page"' : '' %>>Números anteriores</a>
+      <% if (pub.temNormas) { %><a href="/<%= pub.slug %>/normas" <%- aba === 'normas' ? 'aria-current="page"' : '' %>>Normas para publicação</a><% } %>
+    </nav>
+  </div>
+</section>

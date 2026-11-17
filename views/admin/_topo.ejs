@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title><%= typeof tituloAdmin !== 'undefined' ? tituloAdmin + ' · ' : '' %>Painel FoMerco</title>
+<link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/css/site.css">
+<link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body class="admin">
+<% const avisos = { salvo: 'Alterações salvas.', criado: 'Número criado. Agora você pode adicionar trabalhos e arquivos.', excluido: 'Item excluído.', trabalho: 'Trabalho adicionado.', anexo: 'Arquivo adicionado.', senha: 'Senha alterada com sucesso.', trocar: 'Por segurança, crie uma nova senha antes de continuar.' }; %>
+<% if (usuario) { %>
+<header class="adm-topo">
+  <a class="adm-marca" href="/admin"><img src="/static/img/favicon.svg" alt="" width="28" height="28"> Painel FoMerco</a>
+  <nav class="adm-menu" aria-label="Painel">
+    <% const itens = [['/admin', 'Início'], ['/admin/evento', 'Evento atual'], ['/admin/pub/anais', 'Anais'], ['/admin/pub/carta', 'Carta FoMerco'], ['/admin/paginas', 'Páginas de texto'], ['/admin/configuracoes', 'Página inicial e contato']];
+       if (usuario.papel === 'admin') itens.push(['/admin/usuarios', 'Usuários']); %>
+    <% for (const [href, nome] of itens) { const ativo = href === '/admin' ? caminho === '/admin/' || caminho === '/admin' : caminho.startsWith(href); %>
+      <a href="<%= href %>" <%- ativo ? 'aria-current="page"' : '' %>><%= nome %></a>
+    <% } %>
+  </nav>
+  <div class="adm-conta">
+    <a href="/admin/conta"><%= usuario.usuario %></a>
+    <a href="/" target="_blank" rel="noopener">Ver site</a>
+    <form method="post" action="/admin/sair"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="link">Sair</button></form>
+  </div>
+</header>
+<% } %>
+<main class="adm-principal" id="conteudo">
+<% if (msg && avisos[msg]) { %><p class="aviso <%= msg === 'trocar' ? 'atencao' : 'ok' %>" role="status"><%= avisos[msg] %></p><% } %>

@@ -1,0 +1,28 @@
+</main>
+<footer class="rodape">
+  <div class="envoltorio">
+    <img src="/static/img/logo-sem-fundo.png" alt="FoMerco" width="800" height="502" loading="lazy">
+    <div>
+      <h2>Publicações</h2>
+      <ul>
+        <li><a href="/anais">Anais do FoMerco</a></li>
+        <li><a href="/carta">Carta FoMerco</a></li>
+        <li><a href="/sobre">Sobre o FoMerco</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Contato</h2>
+      <% if (cfg.contato_email) { %><p><a href="mailto:<%= cfg.contato_email %>"><%= cfg.contato_email %></a></p><% } %>
+      <% if (cfg.contato_endereco) { %><p class="pre-linha"><%= cfg.contato_endereco %></p><% } %>
+      <% if (!cfg.contato_email && !cfg.contato_endereco) { %><p>Veja a página <a href="/sobre">Sobre</a>.</p><% } %>
+    </div>
+  </div>
+  <div class="fim">
+    <div class="envoltorio">
+      <span>Publicações em acesso aberto. Salvo indicação em contrário, os textos estão sob licença Creative Commons.</span>
+      <a href="/admin">Área restrita</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<%
+  const metas = [['citation_title', t.titulo], ...t.autores_lista.map((a) => ['citation_author', a]),
+    ['citation_publication_date', String(n.ano)], [pub.tipo === 'tecnico-cientifica' ? 'citation_conference_title' : 'citation_journal_title', pub.titulo],
+    ['citation_volume', String(n.volume)], ['citation_issue', n.numero != null ? String(n.numero) : ''],
+    ['citation_pdf_url', t.pdf_url ? base + t.pdf_url : ''], ['citation_issn', pub.issn], ['citation_language', 'pt']];
+  const descricaoPagina = String(t.resumo || '').slice(0, 300);
+%>
+<%- include('partials/cabeca', { metas, descricaoPagina }) %>
+<%- include('partials/pub-topo') %>
+<div class="envoltorio conteudo trabalho">
+  <p class="trilha"><a href="/<%= pub.slug %>/<%= n.slug %>"><%= n.designacao %></a><%= t.secao ? ` · ${t.secao}` : '' %></p>
+  <h2><%= t.titulo %></h2>
+  <ul class="autores"><% for (const a of t.autores_lista) { %><li><%= a %></li><% } %></ul>
+  <% if (t.pdf_url) { %><p><a class="botao" href="<%= t.pdf_url %>">Abrir texto completo <small>PDF, <%= tamanhoLegivel(t.pdf_tamanho) %></small></a></p><% } %>
+  <div class="prosa">
+    <% if (t.resumo) { %><h3>Resumo</h3><p class="pre-linha"><%= t.resumo %></p><% } %>
+    <% if (t.palavras_chave) { %><p><strong>Palavras-chave:</strong> <%= t.palavras_chave %></p><% } %>
+  </div>
+  <div class="citar">
+    <h3>Como citar</h3>
+    <p><%= t.autores_lista.join('; ') %>. <%= t.titulo %>. <em><%= pub.titulo %></em>, v. <%= n.volume %><%= n.numero != null ? `, n. ${n.numero}` : '' %><%= t.paginas ? `, p. ${t.paginas}` : '' %>, <%= n.ano %>. Disponível em: <%= base %>/<%= pub.slug %>/trabalho/<%= t.id %>.</p>
+  </div>
+</div>
+<%- include('partials/pe') %>

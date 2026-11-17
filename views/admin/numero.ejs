@@ -1,0 +1,84 @@
+<% const novo = !n.id; %>
+<%- include('_topo', { tituloAdmin: novo ? 'Novo número' : n.designacao }) %>
+<p class="trilha"><a href="/admin/pub/<%= pub.slug %>"><%= pub.titulo %></a></p>
+<h1><%= novo ? 'Novo número' : n.designacao %>
+  <% if (!novo) { %><span class="etiqueta <%= n.publicado ? 'pub' : 'rasc' %>"><%= n.publicado ? 'Publicado' : 'Rascunho' %></span><% } %></h1>
+<% if (!novo && n.publicado) { %><p><a href="/<%= pub.slug %>/<%= n.slug %>" target="_blank" rel="noopener">Ver no site</a></p><% } %>
+<% if (erros.length) { %><div class="aviso erro" role="alert"><% for (const e of erros) { %><p><%= e %></p><% } %></div><% } %>
+
+<form method="post" action="<%= novo ? `/admin/pub/${pub.slug}/novo` : `/admin/numero/${n.id}` %>" enctype="multipart/form-data" class="formulario">
+  <input type="hidden" name="_csrf" value="<%= csrf %>">
+  <fieldset>
+    <legend>Numeração</legend>
+    <p class="nota">Use volume, número e ano civil. Se a publicação não usa número, deixe-o em branco: fica só “Vol. e ano”.</p>
+    <div class="tres">
+      <label>Volume (Vol.)<input name="volume" inputmode="numeric" value="<%= n.volume %>" required maxlength="4"></label>
+      <label>Número (No.)<input name="numero" inputmode="numeric" value="<%= n.numero ?? '' %>" maxlength="4"></label>
+      <label>Ano<input name="ano" inputmode="numeric" value="<%= n.ano %>" required maxlength="4"></label>
+    </div>
+  </fieldset>
+  <label>Título do número <small>opcional, por exemplo o nome ou tema do encontro</small><input name="titulo" value="<%= n.titulo || '' %>" maxlength="300"></label>
+  <label>Data de publicação<input name="data_publicacao" type="date" value="<%= n.data_publicacao || '' %>"></label>
+  <label>Apresentação do número <small>opcional</small><textarea name="descricao" rows="5"><%= n.descricao || '' %></textarea></label>
+  <fieldset>
+    <legend>Arquivos</legend>
+    <label><%= pub.tem_trabalhos ? 'PDF do número completo (opcional)' : 'PDF do número' %> <small>até 40 MB</small><input type="file" name="pdf" accept="application/pdf"></label>
+    <% if (n.pdf_url) { %><p class="arquivo-atual">Atual: <a href="<%= n.pdf_url %>" target="_blank" rel="noopener"><%= n.pdf_nome %></a> (<%= tamanhoLegivel(n.pdf_tamanho) %>) <label class="caixa"><input type="checkbox" name="remover_pdf" value="1"> Remover</label></p><% } %>
+    <label>Capa <small>opcional, imagem até 5 MB</small><input type="file" name="capa" accept="image/png,image/jpeg,image/webp"></label>
+    <% if (n.capa_url) { %><p class="arquivo-atual"><img class="miniatura" src="<%= n.capa_url %>" alt="Capa atual" width="80"> <label class="caixa"><input type="checkbox" name="remover_capa" value="1"> Remover capa</label></p><% } %>
+  </fieldset>
+  <label class="caixa destaque"><input type="checkbox" name="publicado" value="1" <%= n.publicado ? 'checked' : '' %>> Publicado no site <small>Desmarcado, o número fica como rascunho e só aparece aqui no painel.</small></label>
+  <div class="barra"><button class="botao"><%= novo ? 'Criar número' : 'Salvar alterações' %></button></div>
+</form>
+
+<% if (!novo) { %>
+  <% if (pub.tem_trabalhos) { %>
+  <section class="painel-secao" id="trabalhos">
+    <div class="cabeca-secao">
+      <h2>Trabalhos (<%= trabalhos.length %>)</h2>
+      <a class="botao" href="/admin/numero/<%= n.id %>/trabalho/novo">Adicionar trabalho</a>
+    </div>
+    <% if (!trabalhos.length) { %><p class="vazio">Nenhum trabalho neste número ainda.</p><% } else { %>
+    <table class="tabela">
+      <thead><tr><th>Título</th><th>Autores</th><th>Seção</th><th>PDF</th><th></th></tr></thead>
+      <tbody>
+      <% for (const t of trabalhos) { %>
+        <tr><td><%= t.titulo %></td><td><%= t.autores_lista.join('; ') %></td><td><%= t.secao %></td><td><%= t.pdf_url ? 'Sim' : 'Falta' %></td><td><a href="/admin/trabalho/<%= t.id %>">Editar</a></td></tr>
+      <% } %>
+      </tbody>
+    </table>
+    <% } %>
+  </section>
+  <% } %>
+
+  <section class="painel-secao" id="anexos">
+    <h2>Arquivos complementares</h2>
+    <p class="intro">PDFs extras deste número, como caderno de resumos, programação ou errata. Você pode adicionar mais a qualquer momento.</p>
+    <% if (anexos.length) { %>
+    <ul class="lista-simples">
+      <% for (const x of anexos) { %>
+      <li><a href="<%= x.url %>" target="_blank" rel="noopener"><%= x.rotulo %></a> <small>(<%= tamanhoLegivel(x.tamanho) %>)</small>
+        <details class="excluir"><summary>Excluir</summary>
+          <form method="post" action="/admin/anexo/<%= x.id %>/excluir"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="botao vermelho">Confirmar exclusão</button></form>
+        </details>
+      </li>
+      <% } %>
+    </ul>
+    <% } %>
+    <form method="post" action="/admin/numero/<%= n.id %>/anexos" enctype="multipart/form-data" class="formulario linha">
+      <input type="hidden" name="_csrf" value="<%= csrf %>">
+      <label>Nome do arquivo<input name="rotulo" maxlength="200" placeholder="Caderno de resumos"></label>
+      <label>PDF<input type="file" name="arquivo" accept="application/pdf"></label>
+      <button class="botao contorno">Adicionar arquivo</button>
+    </form>
+  </section>
+
+  <section class="painel-secao zona-perigo">
+    <h2>Excluir este número</h2>
+    <p>Apaga o número, todos os trabalhos e arquivos dele. Não dá para desfazer. Para tirar do ar temporariamente, desmarque “Publicado no site”.</p>
+    <details class="excluir"><summary>Excluir número</summary>
+      <form method="post" action="/admin/numero/<%= n.id %>/excluir"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="botao vermelho">Sim, excluir <%= n.designacao %></button></form>
+    </details>
+  </section>
+<% } %>
+<%- include('_fim') %>

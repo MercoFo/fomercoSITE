@@ -1,0 +1,50 @@
+<%- include('_topo', { tituloAdmin: 'Usuários' }) %>
+<h1>Usuários</h1>
+<p class="intro">Só administradores veem esta página. Editores podem mudar todo o conteúdo, mas não gerenciam contas.</p>
+<% if (erro) { %><p class="aviso erro" role="alert"><%= erro %></p><% } %>
+<% if (senhaGerada) { %>
+<div class="aviso senha" role="status">
+  <p><strong><%= senhaGerada.nova ? 'Conta criada.' : 'Senha redefinida.' %></strong> Passe estes dados para a pessoa por um canal seguro. A senha só aparece agora e deverá ser trocada no primeiro acesso.</p>
+  <p>Usuário: <code><%= senhaGerada.usuario %></code><br>Senha temporária: <code><%= senhaGerada.senha %></code></p>
+</div>
+<% } %>
+<table class="tabela">
+  <thead><tr><th>Usuário</th><th>Papel</th><th>Último acesso</th><th>Ações</th></tr></thead>
+  <tbody>
+  <% for (const u of usuarios) { const eu = u.id === usuario.id; %>
+  <tr>
+    <td><strong><%= u.usuario %></strong><%= eu ? ' (você)' : '' %><% if (u.trocar_senha) { %><br><small>Ainda não trocou a senha temporária</small><% } %></td>
+    <td>
+      <% if (eu) { %><%= u.papel === 'admin' ? 'Administrador' : 'Editor' %><% } else { %>
+      <form method="post" action="/admin/usuarios/<%= u.id %>/papel" class="em-linha">
+        <input type="hidden" name="_csrf" value="<%= csrf %>">
+        <select name="papel" aria-label="Papel de <%= u.usuario %>"><option value="editor" <%= u.papel === 'editor' ? 'selected' : '' %>>Editor</option><option value="admin" <%= u.papel === 'admin' ? 'selected' : '' %>>Administrador</option></select>
+        <button class="link">Mudar</button>
+      </form>
+      <% } %>
+    </td>
+    <td><%= u.ultimo_acesso ? formatarData(u.ultimo_acesso) : 'Nunca' %></td>
+    <td class="acoes-tabela">
+      <% if (!eu) { %>
+      <form method="post" action="/admin/usuarios/<%= u.id %>/redefinir"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="link">Gerar nova senha</button></form>
+      <details class="excluir"><summary>Excluir</summary>
+        <form method="post" action="/admin/usuarios/<%= u.id %>/excluir"><input type="hidden" name="_csrf" value="<%= csrf %>"><button class="botao vermelho">Excluir <%= u.usuario %></button></form>
+      </details>
+      <% } %>
+    </td>
+  </tr>
+  <% } %>
+  </tbody>
+</table>
+
+<section class="painel-secao">
+  <h2>Criar conta</h2>
+  <form method="post" action="/admin/usuarios" class="formulario linha">
+    <input type="hidden" name="_csrf" value="<%= csrf %>">
+    <label>Nome de usuário<input name="usuario" maxlength="40" pattern="[A-Za-z0-9._\-]{3,40}" required autocomplete="off"></label>
+    <label>Papel<select name="papel"><option value="editor">Editor</option><option value="admin">Administrador</option></select></label>
+    <button class="botao">Criar conta</button>
+  </form>
+  <p class="nota">O site gera uma senha temporária forte. Ninguém, nem o administrador, consegue ver a senha que a pessoa escolher depois.</p>
+</section>
+<%- include('_fim') %>

@@ -1,0 +1,62 @@
+<%- include('partials/cabeca') %>
+<section class="abertura">
+  <div class="envoltorio">
+    <div>
+      <h1><%= cfg.hero_titulo %></h1>
+      <p class="chamada"><%= cfg.hero_texto %></p>
+      <div class="acoes">
+        <a class="botao" href="/sobre">Conheça o FoMerco</a>
+        <a class="botao contorno" href="#publicacoes">Ver publicações</a>
+      </div>
+    </div>
+    <img class="logo-grande" src="/static/img/logo-principal.png" alt="Logo do FoMerco: o nome sobre o mapa invertido da América do Sul, com retângulos em vermelho e verde" width="900" height="729">
+  </div>
+</section>
+
+<% if (cfg.evento_ativo === '1') { %>
+<section class="evento" aria-labelledby="evento-titulo">
+  <div class="envoltorio">
+    <img class="arte" src="<%= eventoImagem %>" alt="Arte de divulgação do <%= cfg.evento_nome %>" width="1200" height="1200" loading="lazy">
+    <div>
+      <span class="selo">Próximo encontro</span>
+      <h2 id="evento-titulo"><%= cfg.evento_nome %></h2>
+      <% if (cfg.evento_tema) { %><p class="tema"><%= cfg.evento_tema %></p><% } %>
+      <dl>
+        <% if (cfg.evento_datas) { %><dt>Quando</dt><dd><%= cfg.evento_datas %></dd><% } %>
+        <% if (cfg.evento_local) { %><dt>Onde</dt><dd><%= cfg.evento_local %></dd><% } %>
+      </dl>
+      <% if (cfg.evento_texto) { %><p><%= cfg.evento_texto %></p><% } %>
+      <% if (cfg.evento_link) { %><a class="botao vermelho" href="<%= cfg.evento_link %>" rel="noopener" target="_blank"><%= cfg.evento_botao %></a><% } %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<section class="bloco" id="publicacoes" aria-labelledby="pubs-titulo">
+  <div class="envoltorio">
+    <h2 id="pubs-titulo">Publicações</h2>
+    <div class="pubs">
+      <% for (const p of pubs) { %>
+      <article class="pub-cartao <%= p.slug %>">
+        <h3><a href="/<%= p.slug %>"><%= p.titulo %></a></h3>
+        <p class="desc"><%= p.descricao %></p>
+        <% if (p.atual) { %>
+        <div class="atual">
+          <span>Número atual</span>
+          <a href="/<%= p.slug %>/<%= p.atual.slug %>"><%= p.atual.designacao %></a>
+          <% if (p.atual.titulo) { %><span><%= p.atual.titulo %></span><% } %>
+        </div>
+        <% } else { %>
+        <div class="atual"><span>O primeiro número será publicado em breve.</span></div>
+        <% } %>
+        <ul>
+          <li><a href="/<%= p.slug %>/apresentacao">Apresentação</a></li>
+          <li><a href="/<%= p.slug %>/expediente">Expediente</a></li>
+          <li><a href="/<%= p.slug %>/numeros#anteriores">Números anteriores</a></li>
+        </ul>
+      </article>
+      <% } %>
+    </div>
+  </div>
+</section>
+<%- include('partials/pe') %>

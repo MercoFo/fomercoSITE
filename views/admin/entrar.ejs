@@ -1,0 +1,14 @@
+<%- include('_topo', { tituloAdmin: 'Entrar' }) %>
+<div class="entrar">
+  <img src="/static/img/logo-principal.png" alt="FoMerco" width="900" height="729">
+  <h1>Área restrita</h1>
+  <p>Entre com o usuário e a senha criados pela administração do site.</p>
+  <% if (erro) { %><p class="aviso erro" role="alert"><%= erro %></p><% } %>
+  <form method="post" action="/admin/entrar" class="formulario">
+    <label>Usuário<input name="usuario" autocomplete="username" required maxlength="60" value="<%= usuarioDigitado %>" autofocus></label>
+    <label>Senha<input name="senha" type="password" autocomplete="current-password" required maxlength="200"></label>
+    <button class="botao">Entrar</button>
+  </form>
+  <p class="nota"><a href="/">Voltar ao site</a></p>
+</div>
+<%- include('_fim') %>
